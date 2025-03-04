@@ -4,13 +4,17 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #333333;
+  --primary: #1DA1F2; /* Основной синий цвет Twitter */
+  --secondary: #E1E8ED; /* Светло-серый */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1C1C1C;
+    --foreground: #E1E8ED;
+    --primary: #1DA1F2;
+    --secondary: #657786;
   }
 }
 
@@ -18,4 +22,24 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #1a91da;
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  color: var(--primary);
 }

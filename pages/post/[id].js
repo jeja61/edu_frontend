@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import '../../src/app/globals.css'; // Убедитесь, что путь правильный
+import '../../src/app/globals.css';
 
 export default function PostPage() {
   const router = useRouter();
@@ -19,20 +19,53 @@ export default function PostPage() {
   if (!post) return <p className="text-center text-lg text-gray-500">Загрузка...</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-center text-gray-400 mb-8">
-        {post.title}
-      </h1>
-      <div className="border-2 border-gray-400 rounded-2xl shadow-md p-6 bg-gray-400">
-        <p className="text-gray-800 mb-4">{post.content}</p>
-      </div>
-      <div className="mt-8 text-center">
-        <a
-          href="/pages" // Ссылка для возврата к списку постов
-          className="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
-        >
-          Вернуться к списку постов
-        </a>
+    <div className="max-w-3xl mx-auto p-4">
+      {/* Контейнер для поста */}
+      <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
+        {/* Информация об авторе */}
+        <div className="flex items-center space-x-4">
+          <img
+            className="w-12 h-12 rounded-full"
+            src="https://www.w3schools.com/w3images/avatar2.png" // Аватарка пользователя
+            alt="User Avatar"
+          />
+          <div>
+            <h2 className="font-semibold text-xl text-gray-800">Имя пользователя</h2>
+            <p className="text-sm text-gray-600">@username</p>
+          </div>
+        </div>
+
+        {/* Заголовок поста */}
+        <h1 className="text-3xl font-bold text-gray-800">{post.title}</h1>
+
+        {/* Контент поста */}
+        <p className="text-gray-800">{post.content}</p>
+
+        {/* Кнопки для взаимодействия */}
+        <div className="flex items-center space-x-6 text-gray-600 mt-4">
+          <button className="flex items-center space-x-2 hover:text-blue-600">
+            <span>💬</span>
+            <span>Комментировать</span>
+          </button>
+          <button className="flex items-center space-x-2 hover:text-red-600">
+            <span>❤️</span>
+            <span>Лайк</span>
+          </button>
+          <button className="flex items-center space-x-2 hover:text-blue-600">
+            <span>🔗</span>
+            <span>Поделиться</span>
+          </button>
+        </div>
+
+        {/* Кнопка возвращения к списку постов */}
+        <div className="mt-8 text-center">
+          <a
+            href="/pages"
+            className="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+          >
+            Вернуться к списку постов
+          </a>
+        </div>
       </div>
     </div>
   );
