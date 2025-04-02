@@ -6,6 +6,8 @@ export default function PostPage() {
   const router = useRouter();
   const { id } = router.query;
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -13,58 +15,109 @@ export default function PostPage() {
         .then((response) => response.json())
         .then((data) => setPost(data))
         .catch((error) => console.error("Ошибка загрузки поста:", error));
+
+      fetch(`http://localhost:8080/comments?id=${id}`)
+        .then((response) => response.json())
+        .then((data) => setComments(data))
+        .catch((error) => console.error("Ошибка загрузки комментариев:", error));
     }
   }, [id]);
+
+  const handleCommentSubmit = async () => {
+    if (!newComment.trim()) return;
+
+    const response = await fetch(`http://localhost:8080/comments?id=${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        author: "жежа", // Можно заменить на авторизованного пользователя
+        content: newComment,
+        photos: []
+      })
+    });
+
+    if (response.ok) {
+      router.reload();
+    } else {
+      console.error("Ошибка добавления комментария:", response.status);
+    }
+  };
+
+  // Функция для удаления поста
+  const handleDeletePost = async () => {
+    const response = await fetch(`http://localhost:8080/posts/${id}`, {
+      method: "DELETE"
+    });
+
+    if (response.ok) {
+      router.push("/"); // Перенаправляем на главную страницу
+    } else {
+      console.error("Ошибка удаления поста:", response.status);
+    }
+  };
+
+  // Функция для редактирования поста
+  const handleEditPost = () => {
+    router.push(`/edit-post/${id}`); // Перенаправляем на страницу редактирования
+  };
 
   if (!post) return <p className="text-center text-lg text-gray-500">Загрузка...</p>;
 
   return (
     <div className="max-w-3xl mx-auto p-4">
-      {/* Контейнер для поста */}
       <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
-        {/* Информация об авторе */}
-        <div className="flex items-center space-x-4">
-          <img
-            className="w-12 h-12 rounded-full"
-            src="https://www.w3schools.com/w3images/avatar2.png" // Аватарка пользователя
-            alt="User Avatar"
-          />
-          <div>
-            <h2 className="font-semibold text-xl text-gray-800">Имя пользователя</h2>
-            <p className="text-sm text-gray-600">@username</p>
-          </div>
-        </div>
-
-        {/* Заголовок поста */}
         <h1 className="text-3xl font-bold text-gray-800">{post.title}</h1>
-
-        {/* Контент поста */}
         <p className="text-gray-800">{post.content}</p>
+      </div>
 
-        {/* Кнопки для взаимодействия */}
-        <div className="flex items-center space-x-6 text-gray-600 mt-4">
-          <button className="flex items-center space-x-2 hover:text-blue-600">
-            <span>💬</span>
-            <span>Комментировать</span>
-          </button>
-          <button className="flex items-center space-x-2 hover:text-red-600">
-            <span>❤️</span>
-            <span>Лайк</span>
-          </button>
-          <button className="flex items-center space-x-2 hover:text-blue-600">
-            <span>🔗</span>
-            <span>Поделиться</span>
-          </button>
-        </div>
+      {/* Кнопки для редактирования и удаления */}
+      <div className="mt-4 flex justify-between">
+        <button
+          onClick={handleEditPost}
+          className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+        >
+          Редактировать пост
+        </button>
+        <button
+          onClick={handleDeletePost}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
+          Удалить пост
+        </button>
+      </div>
 
-        {/* Кнопка возвращения к списку постов */}
-        <div className="mt-8 text-center">
-          <a
-            href="/pages"
-            className="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+      {/* Секция комментариев */}
+      <div className="mt-6 bg-white p-4 border border-gray-300 rounded-xl shadow-md">
+        <h2 className="text-2xl font-semibold text-gray-800">Комментарии</h2>
+        {comments.length > 0 ? (
+          <ul className="mt-4 space-y-2">
+            {comments.map((comment) => (
+              <li key={comment.id} className="p-2 border-b border-gray-300">
+                <p className="text-gray-700">
+                  <strong>{comment.author}:</strong> {comment.content}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500 mt-4">Комментариев пока нет.</p>
+        )}
+
+        {/* Форма добавления комментария */}
+        <div className="mt-4">
+          <textarea
+            className="w-full p-2 border border-gray-300 rounded-lg"
+            rows="3"
+            placeholder="Напишите комментарий..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button
+            onClick={handleCommentSubmit}
+            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            Вернуться к списку постов
-          </a>
+            Добавить комментарий
+          </button>
         </div>
       </div>
     </div>
