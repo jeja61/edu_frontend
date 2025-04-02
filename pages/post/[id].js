@@ -6,16 +6,19 @@ export default function PostPage() {
   const router = useRouter();
   const { id } = router.query;
   const [post, setPost] = useState(null);
+  const [author, setAuthor] = useState(""); // Теперь автор вводится вручную
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     if (id) {
+      // Загружаем пост
       fetch(`http://localhost:8080/posts/${id}`)
         .then((response) => response.json())
         .then((data) => setPost(data))
         .catch((error) => console.error("Ошибка загрузки поста:", error));
 
+      // Загружаем комментарии
       fetch(`http://localhost:8080/comments?id=${id}`)
         .then((response) => response.json())
         .then((data) => setComments(data))
@@ -24,15 +27,19 @@ export default function PostPage() {
   }, [id]);
 
   const handleCommentSubmit = async () => {
-    if (!newComment.trim()) return;
+    if (!newComment.trim() || !author.trim()) {
+      console.error("Комментарий или автор не могут быть пустыми.");
+      return;
+    }
 
+    // Отправляем комментарий на сервер
     const response = await fetch(`http://localhost:8080/comments?id=${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        author: "жежа", // Можно заменить на авторизованного пользователя
+        author: author,
         content: newComment,
-        photos: []
+        photos: [] // Если фотографии, добавьте их сюда
       })
     });
 
@@ -105,8 +112,15 @@ export default function PostPage() {
 
         {/* Форма добавления комментария */}
         <div className="mt-4">
+          <input
+            type="text"
+            className="w-full p-2 border border-gray-300 rounded-lg text-black"
+            placeholder="Ваш ник"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
           <textarea
-            className="w-full p-2 border border-gray-300 rounded-lg"
+            className="w-full p-2 border border-gray-300 rounded-lg mt-2 text-black"
             rows="3"
             placeholder="Напишите комментарий..."
             value={newComment}

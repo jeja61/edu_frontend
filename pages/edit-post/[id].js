@@ -59,13 +59,13 @@ export default function EditPostPage() {
           placeholder="Заголовок поста"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
         />
         <textarea
           placeholder="Текст поста"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
           rows="5"
         />
         <input
@@ -73,14 +73,14 @@ export default function EditPostPage() {
           placeholder="Автор"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
         />
         <input
           type="text"
           placeholder="Теги (через запятую)"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
         />
         <button
           type="submit"

@@ -20,7 +20,7 @@ export default function CreatePostPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        tagsUd: tagsList,  // Список тегов
+        tagsId: tagsList,  // Список тегов
         title: title,    // Заголовок
         author: author,  // Автор
         createdDate: new Date().toISOString(),  // Дата создания
@@ -42,13 +42,13 @@ export default function CreatePostPage() {
           placeholder="Заголовок поста"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
         />
         <textarea
           placeholder="Текст поста"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
           rows="5"
         />
         <input
@@ -56,14 +56,14 @@ export default function CreatePostPage() {
           placeholder="Автор"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
         />
         <input
           type="text"
           placeholder="Теги (через запятую)"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg text-black"
         />
         <button
           type="submit"
